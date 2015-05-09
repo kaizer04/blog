@@ -49,3 +49,7 @@ var_dump($param);
 $controller_class = '\Controllers\\' . ucfirst($controller) . '_Controller';
 
 $instance = new $controller_class();
+
+if (method_exists($instance, $method)) {
+    call_user_func_array(array($instance, $method), array($param));
+}

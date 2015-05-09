@@ -1,0 +1,1 @@
+<h2>Posts` views/posts/index.php</h2>
