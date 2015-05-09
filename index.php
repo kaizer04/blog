@@ -1,8 +1,7 @@
 <?php
-echo 'Front controller!';
 
-define('DX_ROOT_DIR', dirname(__FILE__).'/');
-define('DX_ROOT_PATH', basename(dirname(__FILE__)).'/');
+define('DX_ROOT_DIR', dirname(__FILE__) . '/');
+define('DX_ROOT_PATH', basename(dirname(__FILE__)) . '/');
 
 $request = $_SERVER['REQUEST_URI'];
 $request_home = '/' . DX_ROOT_PATH;
@@ -42,9 +41,9 @@ if ( ! empty( $request ) ) {
     }
 }
 
-var_dump($controller);
-var_dump($method);
-var_dump($param);
+//var_dump($controller);
+//var_dump($method);
+//var_dump($param);
 
 $controller_class = '\Controllers\\' . ucfirst($controller) . '_Controller';
 

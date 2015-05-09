@@ -2,22 +2,26 @@
 
 namespace Controllers;
 
-class Posts_Controller {
+class Posts_Controller extends Master_Controller {
     public  function  __construct() {
-        echo "POST<br />";
+//        echo "POST<br />";
+        parent::__construct('/views/posts/');
     }
 
     public function index() {
-        echo "Posts` index";
-
-        include_once DX_ROOT_DIR . '/views/posts/index.php';
+//        echo "Posts` index";
+//        include_once DX_ROOT_DIR . '/views/posts/index.php';
+        $template_name = DX_ROOT_DIR . $this->views_dir . 'index.php';
+        include_once $this->layout;
     }
 
     public function date() {
-        include_once DX_ROOT_DIR . '/views/posts/date.php';
+        $template_name = DX_ROOT_DIR . $this->views_dir . 'date.php';
+        include_once $this->layout;
     }
 
     public function tag() {
-       include_once DX_ROOT_DIR . '/views/posts/tag.php';
+        $template_name = DX_ROOT_DIR . $this->views_dir . 'tag.php';
+        include_once $this->layout;
     }
 }
