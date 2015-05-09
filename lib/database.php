@@ -19,7 +19,7 @@ class Database {
     public static function get_instance() {
         static $instance = null;
 
-        if(null === $instance) {
+        if (null === $instance) {
             $instance = new static();
         }
 
