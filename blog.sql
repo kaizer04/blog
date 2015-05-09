@@ -8,88 +8,84 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
 -- -----------------------------------------------------
--- Schema mydb
+-- Schema blog
 -- -----------------------------------------------------
 
 -- -----------------------------------------------------
--- Schema mydb
+-- Schema blog
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ;
-USE `mydb` ;
+CREATE SCHEMA IF NOT EXISTS `blog` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ;
+USE `blog` ;
 
 -- -----------------------------------------------------
--- Table `mydb`.`posts`
+-- Table `blog`.`posts`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`posts` (
-  `id` INT NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `blog`.`posts` (
+  `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
   `title` VARCHAR(45) NOT NULL,
   `content` VARCHAR(500) NOT NULL,
-  `publish_date` DATETIME NOT NULL,
-  PRIMARY KEY (`id`))
+  `publish_date` DATETIME NOT NULL)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`tags`
+-- Table `blog`.`tags`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`tags` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(45) NULL,
-  PRIMARY KEY (`id`))
+CREATE TABLE IF NOT EXISTS `blog`.`tags` (
+  `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  `name` VARCHAR(45) NULL)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`comments`
+-- Table `blog`.`comments`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`comments` (
-  `id` INT NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `blog`.`comments` (
+  `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
   `visitor_name` VARCHAR(45) NOT NULL,
   `visitor_email` VARCHAR(45) NULL,
   `text` VARCHAR(200) NOT NULL,
   `post_id` INT NOT NULL,
-  PRIMARY KEY (`id`),
   INDEX `fk_comments_posts_idx` (`post_id` ASC),
   CONSTRAINT `fk_comments_posts`
     FOREIGN KEY (`post_id`)
-    REFERENCES `mydb`.`posts` (`id`)
+    REFERENCES `blog`.`posts` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`tags_comments`
+-- Table `blog`.`posts_comments`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`tags_comments` (
+CREATE TABLE IF NOT EXISTS `blog`.`tags_posts` (
   `tag_id` INT NOT NULL,
-  `comment_id` INT NOT NULL,
-  PRIMARY KEY (`tag_id`, `comment_id`),
-  INDEX `fk_tags_has_comments_comments1_idx` (`comment_id` ASC),
-  INDEX `fk_tags_has_comments_tags1_idx` (`tag_id` ASC),
-  CONSTRAINT `fk_tags_has_comments_tags1`
+  `post_id` INT NOT NULL,
+  PRIMARY KEY (`tag_id`, `post_id`),
+  INDEX `fk_tags_has_posts_posts1_idx` (`post_id` ASC),
+  INDEX `fk_tags_has_posts_tags1_idx` (`tag_id` ASC),
+  CONSTRAINT `fk_tags_has_posts_tags1`
     FOREIGN KEY (`tag_id`)
-    REFERENCES `mydb`.`tags` (`id`)
+    REFERENCES `blog`.`tags` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_tags_has_comments_comments1`
-    FOREIGN KEY (`comment_id`)
-    REFERENCES `mydb`.`comments` (`id`)
+  CONSTRAINT `fk_tags_has_posts_posts1`
+    FOREIGN KEY (`post_id`)
+    REFERENCES `blog`.`posts` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`users`
+-- Table `blog`.`users`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`users` (
-  `id` INT NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `blog`.`users` (
+  `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
   `username` VARCHAR(45) NOT NULL,
   `password` VARCHAR(45) NOT NULL,
   `email` VARCHAR(45) NOT NULL,
   `name` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`id`),
   UNIQUE INDEX `username_UNIQUE` (`username` ASC),
   UNIQUE INDEX `email_UNIQUE` (`email` ASC))
 ENGINE = InnoDB;
