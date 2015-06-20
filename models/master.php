@@ -8,9 +8,10 @@ class Master_Model {
     protected $db;
 
     public function __construct($args = array()) {
-        $args = array(
+        $defaults = array(
             'limit' => 0
         );
+        $args = array_merge($defaults, $args);
 
         if (!isset($args['table'])) {
             die('Table not defined');
@@ -24,12 +25,49 @@ class Master_Model {
         $this->db = $db_object::get_db();
     }
 
+    public function get($id) {
+        return $this->find(array('columns' => 'title', 'where' => 'id = ' . $id));
+}
+
+    public function get_all() {
+        return $this->find(array('orderBy' => 'publish_date DESC'));
+    }
+
+    public function get_all_users() {
+        return $this->find();
+    }
+//    public function get_by_tag($name) {
+//        return $this->find(array('columns' => "p.title",
+//            'table' => "posts p
+//                        join tags_posts tp on p.id = tp.post_id
+//                        join tags t on t.id = tp.tag_id",
+//            'where' => "t.name '" . $name . "'"));
+//    }
+
+    public function add($element) {
+        $keys = array_keys($element);
+        $values = array();
+        foreach($element as $key => $value) {
+            $values[] = "'" . $this->db->real_escape_string($value) . "'";
+        }
+
+        $keys = implode($keys, ',');
+        $values = implode($values, ',');
+
+        $query = "INSERT INTO {$this->table}($keys) VALUES($values)";
+        //var_dump($query); die();
+        $this->db->query($query);
+
+        return $this->db->affected_rows;
+    }
+
     public function find($args = array()) {
         $defaults = array(
             'table' => $this->table,
             'limit' => $this->limit,
             'where' => '',
-            'columns' => '*'
+            'columns' => '*',
+            'orderBy' => ''
         );
 
         $args = array_merge($defaults, $args);
@@ -43,6 +81,10 @@ class Master_Model {
 
         if (!empty($limit)) {
             $query .= " LIMIT " . $limit;
+        }
+
+        if (!empty($orderBy)) {
+            $query .= " ORDER BY " . $orderBy;
         }
 
         $result_set = $this->db->query($query);
